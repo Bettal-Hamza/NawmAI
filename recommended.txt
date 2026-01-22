@@ -1,0 +1,332 @@
+1️⃣ Architecture — KEEP but SIMPLIFY
+✅ KEEP
+
+React frontend
+
+Fastify backend
+
+PostgreSQL
+
+OpenAI integration
+
+Tailwind + Vite
+
+🔧 CHANGE (important)
+❌ Problem: user_id dependency
+
+You are introducing users table + auth complexity too early.
+
+✅ Recommendation (VERY IMPORTANT)
+
+For MVP:
+
+Use email OR phone number as primary identifier
+
+Generate a uuid client-side
+
+No passwords in v1
+
+This avoids:
+
+Auth bugs
+
+Time loss
+
+User friction
+
+👉 You can still say “user accounts” to Enactus.
+
+2️⃣ Frontend — OnboardingForm.jsx
+✅ KEEP
+
+5 questions
+
+Tailwind
+
+Validation
+
+POST /api/profile
+
+🔧 CHANGE
+❌ Too many similar questions
+
+You listed:
+
+sleep schedule
+
+sleep quality
+
+sleep duration
+
+sleep issues
+
+sleep goals
+
+This is cognitively heavy.
+
+✅ BETTER (optimized onboarding)
+
+Limit to 4 questions:
+
+Usual bedtime (time)
+
+Usual wake time (time)
+
+Main problem (select)
+
+Can’t fall asleep
+
+Wake up tired
+
+Wake up at night
+
+Phone usage before bed
+
+<30 min / 30–60 / 1h+
+
+➡️ Sleep goals can be inferred later.
+
+3️⃣ Backend — Fastify API
+server.js
+
+✅ KEEP everything
+⚠️ BUT:
+
+CHANGE
+
+Don’t overdo middleware
+
+One error handler is enough
+
+No role-based logic
+
+Fastify skeleton should be < 100 lines.
+
+routes/profile.js
+❌ Current risk
+
+You’re storing “user profile” but don’t define how it’s used later.
+
+✅ Recommendation
+
+Store only what affects AI output.
+
+Minimal profile schema:
+
+bedtime TIME
+wake_time TIME
+main_problem TEXT
+phone_usage TEXT
+created_at
+
+
+Nothing else.
+
+routes/checkins.js
+✅ Mostly good
+
+But you don’t need this many fields.
+
+🔧 CHANGE payload to:
+{
+  "user_id": "uuid",
+  "sleep_hours": 6.5,
+  "sleep_quality": 3,
+  "phone_before_bed": true
+}
+
+
+❌ Remove:
+
+mood
+
+notes
+
+bedtime/wake_time (already known)
+
+Less friction = more daily usage.
+
+4️⃣ Database — schema.sql
+✅ KEEP PostgreSQL
+🔧 CHANGE (simplify)
+❌ users table is overkill
+
+You don’t need full users yet.
+
+✅ Minimal schema (MVP-perfect)
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  email TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE sleep_profiles (
+  user_id UUID PRIMARY KEY,
+  bedtime TIME,
+  wake_time TIME,
+  main_problem TEXT,
+  phone_usage TEXT
+);
+
+CREATE TABLE sleep_checkins (
+  id SERIAL PRIMARY KEY,
+  user_id UUID,
+  sleep_hours NUMERIC,
+  sleep_quality INT,
+  phone_before_bed BOOLEAN,
+  created_at DATE DEFAULT CURRENT_DATE
+);
+
+
+Indexes only on:
+
+user_id
+
+created_at
+
+5️⃣ AI Integration — MOST IMPORTANT PART
+reportGenerator.js
+✅ KEEP
+
+Weekly report
+
+Friendly tone
+
+No medical claims
+
+Fallback message
+
+🔧 CRITICAL CHANGE
+❌ Don’t send raw data directly to OpenAI
+
+You’ll get inconsistent output.
+
+✅ DO THIS INSTEAD (very important)
+
+Pre-compute stats
+
+Send summary to OpenAI
+
+Example:
+
+{
+  avg_sleep: 6.4,
+  best_day_sleep: 7.5,
+  worst_day_sleep: 4.8,
+  phone_nights: 5,
+  quality_trend: "improving"
+}
+
+
+Then ask AI to explain, not calculate.
+
+This:
+
+Cheaper
+
+Faster
+
+More reliable
+
+Example AI instruction (gold):
+You are an AI sleep coach for students.
+Explain the weekly sleep data in a friendly, motivational way.
+DO NOT give medical advice.
+DO NOT diagnose conditions.
+Focus on habits and small improvements.
+Limit response to 120 words.
+
+6️⃣ OpenAI API — REAL vs MOCK
+⚠️ My honest advice:
+
+Start with REAL API, but:
+
+Add a feature flag:
+
+USE_AI=true
+
+
+If false → return template message.
+
+This avoids demo failures.
+
+7️⃣ Testing Plan — CUT MOST OF IT
+❌ Problem
+
+Your testing plan is too heavy for Enactus MVP.
+
+✅ What you ACTUALLY need
+Automated:
+
+None (optional 1–2 API tests)
+
+Manual (what judges care about):
+
+Screenshots
+
+Real users
+
+Feedback messages
+
+Payments
+
+Testing time = user acquisition time lost.
+
+8️⃣ Missing (IMPORTANT FOR ENACTUS)
+
+You are missing 2 critical things:
+
+1️⃣ Admin / Export
+
+You NEED:
+
+Export user feedback
+
+Export sleep improvement stats
+
+CSV is enough.
+
+2️⃣ Feedback collection
+
+Add:
+
+“Did this help?” (Yes / No)
+
+Optional comment
+
+This is gold for Enactus.
+
+9️⃣ Final Verdict
+✅ What to KEEP
+
+Stack
+
+Structure
+
+AI weekly report idea
+
+Fastify
+
+PostgreSQL
+
+🔧 What to CHANGE
+
+Simplify user model
+
+Reduce onboarding questions
+
+Pre-process AI data
+
+Reduce check-in fields
+
+Cut heavy testing
+
+❌ What to CUT
+
+Full auth
+
+Deep sleep analysis
+
+Mood tracking
+
+Over-testing
