@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+/* ============================================================
+   NawmAI — Enactus-Inspired Premium Theme
+   Yellow accent · Black backgrounds · Elegant & high-contrast
+   ============================================================ */
+
+@theme {
+  /* Backgrounds — true dark scale */
+  --color-navy-950: #050505;
+  --color-navy-900: #0a0a0a;
+  --color-navy-800: #111111;
+  --color-navy-700: #1c1c1c;
+  --color-navy-600: #2a2a2a;
+
+  /* Text scale */
+  --color-slate-100: #f5f5f5;
+  --color-slate-200: #e5e5e5;
+  --color-slate-300: #d4d4d4;
+  --color-slate-400: #a1a1aa;
+  --color-slate-500: #71717a;
+
+  /* Brand accent — Enactus yellow */
+  --color-brand-400: #FBBF24;
+  --color-brand-500: #EAB308;
+  --color-brand-600: #CA8A04;
+
+  /* Semantic colors */
+  --color-indigo-400: #FBBF24;
+  --color-indigo-500: #EAB308;
+  --color-emerald-400: #34D399;
+  --color-green-400: #4ADE80;
+  --color-amber-400: #FBBF24;
+  --color-orange-400: #FB923C;
+  --color-red-400: #F87171;
+  --color-blue-400: #60A5FA;
+  --color-cyan-400: #22D3EE;
+  --color-pink-400: #F472B6;
+  --color-purple-400: #C084FC;
+  --color-yellow-400: #FBBF24;
+  --color-sky-400: #38BDF8;
+}
+
+/* ---- Global ---- */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #050505;
+  color: #f5f5f5;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Custom scrollbar ---- */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 999px;
+}
+
+/* ---- Skeleton shimmer ---- */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1c1c1c 25%, #2a2a2a 50%, #1c1c1c 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 12px;
+}
+
+/* ---- Yellow glow pulse for buttons ---- */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(251, 191, 36, 0.15); }
+  50% { box-shadow: 0 0 24px rgba(251, 191, 36, 0.3); }
+}
+
+.glow-yellow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .skeleton { animation: none; }
+  .glow-yellow { animation: none; }
+}
+
+/* ---- Focus ring ---- */
+:focus-visible {
+  outline: 2px solid #FBBF24;
+  outline-offset: 2px;
+}
