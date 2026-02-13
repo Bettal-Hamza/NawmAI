@@ -189,7 +189,6 @@ const Dashboard: React.FC = () => {
     return map[iconName] || <HiOutlineStar className="text-lg text-brand-400" />;
   };
 
-  // Dynamic motivational greeting based on progress
   const getMotivation = () => {
     if (checkins.length === 0) return "Let's start tracking your sleep tonight!";
     if (sleepScore >= 80) return 'Outstanding sleep! Keep it up 👏';
@@ -201,7 +200,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <PageTransition className="min-h-screen">
-      {/* Header */}
       <motion.header
         className="border-b border-navy-700 px-6 py-4"
         initial={{ opacity: 0, y: -12 }}
@@ -221,7 +219,6 @@ const Dashboard: React.FC = () => {
       </motion.header>
 
       <main className="max-w-5xl mx-auto px-6 py-8">
-        {/* Welcome + motivation */}
         <FadeInUp delay={0.1}>
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-slate-100">
@@ -244,7 +241,6 @@ const Dashboard: React.FC = () => {
           </FadeInUp>
         ) : (
           <StaggerContainer staggerDelay={0.12} delay={0.15}>
-            {/* SLEEP SCORE HERO */}
             <FadeUp>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 <Card className="md:col-span-1 flex flex-col items-center justify-center py-6">
@@ -284,7 +280,6 @@ const Dashboard: React.FC = () => {
               </div>
             </FadeUp>
 
-            {/* 7-DAY TREND */}
             {trendData.length > 1 && (
               <FadeUp>
                 <Card className="mb-6">
@@ -317,7 +312,6 @@ const Dashboard: React.FC = () => {
               </FadeUp>
             )}
 
-            {/* NIGHTLY MISSIONS */}
             <FadeUp>
               <Card className="mb-6">
                 <div className="flex items-center gap-2 mb-4">
@@ -355,7 +349,6 @@ const Dashboard: React.FC = () => {
               </Card>
             </FadeUp>
 
-            {/* ACTION CARDS */}
             <FadeUp>
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <ActionCard icon={<HiOutlinePencilSquare className="text-2xl text-brand-400" />} label="Check-in" onClick={() => navigate('/checkin')} />
@@ -364,7 +357,6 @@ const Dashboard: React.FC = () => {
               </div>
             </FadeUp>
 
-            {/* RECENT CHECK-INS */}
             {checkins.length > 0 && (
               <FadeUp>
                 <div>
@@ -409,7 +401,6 @@ const Dashboard: React.FC = () => {
         )}
       </main>
 
-      {/* DETAIL MODAL */}
       <AnimatePresence>
         {selectedCheckin && (
           <motion.div
@@ -528,7 +519,6 @@ const Dashboard: React.FC = () => {
   );
 };
 
-// Helper: Time-based greeting
 const getGreeting = () => {
   const hour = new Date().getHours();
   if (hour < 12) return 'morning';
@@ -536,7 +526,6 @@ const getGreeting = () => {
   return 'evening';
 };
 
-// Sub-components
 const StatTile: React.FC<{
   icon: React.ReactNode;
   value: string;

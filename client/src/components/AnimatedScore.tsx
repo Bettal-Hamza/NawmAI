@@ -44,7 +44,6 @@ const AnimatedScore: React.FC<AnimatedScoreProps> = ({
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = Math.round(eased * value);
       setDisplayValue(current);

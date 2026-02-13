@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LoadingSpinner from './components/LoadingSpinner';
 import { UserProvider, useUser } from './hooks/useUser';
 
-// Lazy-load pages for better performance
 const Landing = lazy(() => import('./pages/Landing'));
 const Onboarding = lazy(() => import('./pages/Onboarding'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -11,7 +10,6 @@ const Checkin = lazy(() => import('./pages/Checkin'));
 const Report = lazy(() => import('./pages/Report'));
 const Feedback = lazy(() => import('./pages/Feedback'));
 
-// Protected route — redirects to onboarding if not logged in
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUser();
   if (!user) return <Navigate to="/onboarding" replace />;

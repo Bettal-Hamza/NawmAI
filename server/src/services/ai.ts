@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Lazy-initialize to allow server to start without API key
 let groq: Groq | null = null;
 
 const getGroqClient = (): Groq => {
@@ -15,8 +14,6 @@ const getGroqClient = (): Groq => {
   }
   return groq;
 };
-
-// ============ TYPES ============
 
 interface WeeklyStats {
   total_checkins: number;
@@ -54,12 +51,6 @@ export interface StructuredWeeklyReport {
   coach_note: string;
 }
 
-// ============ DAILY FEEDBACK (2 sentences) ============
-
-/**
- * Generate short daily feedback after a check-in.
- * Returns 2 sentences: one observation + one small tip.
- */
 export const generateDailyFeedback = async (
   checkin: {
     sleep_hours: number;
@@ -99,9 +90,6 @@ Rules:
   return response.choices[0]?.message?.content?.trim() || '';
 };
 
-// ============ WEEKLY REPORT (structured) ============
-
-/** Extract keywords from user notes for AI context */
 const extractNoteKeywords = (checkins: any[]): string[] => {
   const keywords: Record<string, number> = {};
   const stopWords = new Set(['i', 'a', 'the', 'was', 'had', 'my', 'to', 'and', 'it', 'but', 'so', 'in', 'of', 'for', 'on', 'is', 'at', 'this', 'that', 'with']);
@@ -122,7 +110,6 @@ const extractNoteKeywords = (checkins: any[]): string[] => {
     .map(([word]) => word);
 };
 
-/** Compute a trend label from current vs previous value */
 const trendLabel = (current: number | null, previous: number | null): string => {
   if (current == null || previous == null) return 'no data';
   const diff = current - previous;
@@ -130,10 +117,6 @@ const trendLabel = (current: number | null, previous: number | null): string => 
   return diff > 0 ? `improved (+${diff.toFixed(1)})` : `declined (${diff.toFixed(1)})`;
 };
 
-/**
- * Generate a structured weekly report using Groq AI.
- * Backend pre-computes all stats; AI generates insights.
- */
 export const generateWeeklyReport = async (
   userName: string,
   stats: WeeklyStats,
@@ -146,7 +129,6 @@ export const generateWeeklyReport = async (
   const moodTrend = trendLabel(stats.avg_mood, prevStats?.avg_mood ?? null);
   const hoursTrend = trendLabel(stats.avg_sleep_hours, prevStats?.avg_sleep_hours ?? null);
 
-  // Phone correlation insight
   let phoneInsight = 'No phone data available';
   if (stats.phone_nights > 0 && stats.avg_quality_no_phone != null) {
     const diff = (stats.avg_quality_no_phone || 0) - (stats.avg_quality_phone || 0);
@@ -209,13 +191,11 @@ Rules:
   const content = response.choices[0]?.message?.content?.trim();
   if (!content) throw new Error('No response from AI');
 
-  // Parse JSON — strip any markdown fencing the model might add
   const cleanJson = content.replace(/^```json?\n?/i, '').replace(/\n?```$/i, '').trim();
 
   try {
     const parsed = JSON.parse(cleanJson) as StructuredWeeklyReport;
 
-    // Validate and clamp score
     parsed.sleep_score = Math.max(0, Math.min(100, Math.round(parsed.sleep_score)));
     if (!parsed.sleep_score_label) {
       parsed.sleep_score_label = parsed.sleep_score >= 80 ? 'Excellent' : parsed.sleep_score >= 60 ? 'Good' : parsed.sleep_score >= 40 ? 'Fair' : 'Poor';
@@ -227,12 +207,10 @@ Rules:
 
     return parsed;
   } catch {
-    // Fallback: generate a template report from stats
     return generateFallbackReport(stats, prevStats);
   }
 };
 
-/** Template fallback if AI JSON parsing fails */
 const generateFallbackReport = (stats: WeeklyStats, prevStats: PrevWeekStats | null): StructuredWeeklyReport => {
   const score = Math.round(
     ((stats.avg_quality || 3) / 5) * 40 +

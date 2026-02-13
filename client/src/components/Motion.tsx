@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, type Variants } from 'framer-motion';
 
-/** Staggered reveal container — wraps children that animate sequentially */
 export const StaggerContainer: React.FC<{
   children: React.ReactNode;
   className?: string;
@@ -21,7 +20,6 @@ export const StaggerContainer: React.FC<{
   </motion.div>
 );
 
-/** Fade-up child item for use inside StaggerContainer */
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
@@ -36,7 +34,6 @@ export const FadeUp: React.FC<{
   </motion.div>
 );
 
-/** Standalone fade-in-up (not inside StaggerContainer) */
 export const FadeInUp: React.FC<{
   children: React.ReactNode;
   className?: string;
@@ -53,7 +50,6 @@ export const FadeInUp: React.FC<{
   </motion.div>
 );
 
-/** Scale-in for hero elements */
 export const ScaleIn: React.FC<{
   children: React.ReactNode;
   className?: string;
@@ -69,7 +65,6 @@ export const ScaleIn: React.FC<{
   </motion.div>
 );
 
-/** Page transition wrapper */
 export const PageTransition: React.FC<{
   children: React.ReactNode;
   className?: string;

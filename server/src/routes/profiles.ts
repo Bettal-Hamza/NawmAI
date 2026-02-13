@@ -3,7 +3,6 @@ import { createSleepProfile, getSleepProfile } from '../db/queries';
 import { isValidUUID, isValidTime } from '../utils/validation';
 
 export const profileRoutes = async (fastify: FastifyInstance) => {
-  // Create sleep profile (onboarding)
   fastify.post('/api/sleep-profiles', async (request, reply) => {
     const { userId, bedtimeGoal, wakeupGoal, sleepChallenges } = request.body as {
       userId: string;
@@ -12,7 +11,6 @@ export const profileRoutes = async (fastify: FastifyInstance) => {
       sleepChallenges: string[];
     };
 
-    // Validate
     if (!userId || !bedtimeGoal || !wakeupGoal) {
       return reply.status(400).send({ error: 'userId, bedtimeGoal, and wakeupGoal are required' });
     }
@@ -39,7 +37,6 @@ export const profileRoutes = async (fastify: FastifyInstance) => {
     }
   });
 
-  // Get sleep profile
   fastify.get('/api/sleep-profiles/:userId', async (request, reply) => {
     const { userId } = request.params as { userId: string };
 

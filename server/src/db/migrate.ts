@@ -1,13 +1,11 @@
 import pool from './pool';
 
-// Database migration — creates all tables if they don't exist
 const migrate = async () => {
   const client = await pool.connect();
 
   try {
     await client.query('BEGIN');
 
-    // Users table
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -18,7 +16,6 @@ const migrate = async () => {
       );
     `);
 
-    // Sleep profiles (onboarding data)
     await client.query(`
       CREATE TABLE IF NOT EXISTS sleep_profiles (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -30,7 +27,6 @@ const migrate = async () => {
       );
     `);
 
-    // Daily sleep check-ins
     await client.query(`
       CREATE TABLE IF NOT EXISTS sleep_checkins (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -46,7 +42,6 @@ const migrate = async () => {
       );
     `);
 
-    // User feedback
     await client.query(`
       CREATE TABLE IF NOT EXISTS feedback (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -57,7 +52,6 @@ const migrate = async () => {
       );
     `);
 
-    // Weekly AI reports (saved per generation)
     await client.query(`
       CREATE TABLE IF NOT EXISTS weekly_reports (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -70,7 +64,6 @@ const migrate = async () => {
       );
     `);
 
-    // ── Column additions (safe to re-run) ──
     await client.query(`
       ALTER TABLE sleep_checkins
         ADD COLUMN IF NOT EXISTS phone_before_bed BOOLEAN DEFAULT false;

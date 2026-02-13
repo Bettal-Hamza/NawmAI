@@ -7,8 +7,6 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// ============ USERS ============
-
 export const registerUser = async (name: string, email: string, age?: number) => {
   const { data } = await api.post('/api/users', { name, email, age });
   return data;
@@ -18,8 +16,6 @@ export const getUser = async (email: string) => {
   const { data } = await api.get(`/api/users/${email}`);
   return data;
 };
-
-// ============ SLEEP PROFILES ============
 
 export const createSleepProfile = async (
   userId: string,
@@ -37,8 +33,6 @@ export const getSleepProfile = async (userId: string) => {
   const { data } = await api.get(`/api/sleep-profiles/${userId}`);
   return data;
 };
-
-// ============ CHECK-INS ============
 
 export const submitCheckin = async (checkin: {
   userId: string;
@@ -64,8 +58,6 @@ export const getWeeklySummary = async (userId: string) => {
   return data;
 };
 
-// ============ REPORTS ============
-
 export const getWeeklyReport = async (userId: string, regenerate = false) => {
   const { data } = await api.get(`/api/reports/${userId}/weekly${regenerate ? '?regenerate=true' : ''}`);
   return data;
@@ -75,8 +67,6 @@ export const getReportByDate = async (userId: string, date: string) => {
   const { data } = await api.get(`/api/reports/${userId}/by-date?date=${date}`);
   return data;
 };
-
-// ============ FEEDBACK ============
 
 export const submitFeedback = async (userId: string, message: string, rating: number) => {
   const { data } = await api.post('/api/feedback', { userId, message, rating });

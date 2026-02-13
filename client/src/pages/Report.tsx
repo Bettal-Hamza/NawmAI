@@ -109,7 +109,6 @@ const Report: React.FC = () => {
           ) : report ? (
             <motion.div key="report" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <StaggerContainer className="flex flex-col gap-4">
-                {/* Partial data warning */}
                 {data.isPartial && (
                   <FadeUp>
                     <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3">
@@ -121,7 +120,6 @@ const Report: React.FC = () => {
                   </FadeUp>
                 )}
 
-                {/* ═══ SLEEP SCORE HERO ═══ */}
                 <FadeUp>
                   <Card>
                     <div className="flex flex-col items-center py-4">
@@ -134,7 +132,6 @@ const Report: React.FC = () => {
                   </Card>
                 </FadeUp>
 
-                {/* ═══ QUICK STATS ROW ═══ */}
                 <FadeUp>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <MiniStat icon={<HiOutlinePencilSquare className="text-lg text-brand-400" />} label="Check-ins" value={String(data.stats.total_checkins)} />
@@ -144,7 +141,6 @@ const Report: React.FC = () => {
                   </div>
                 </FadeUp>
 
-                {/* ═══ KEY WINS ═══ */}
                 {report.key_wins.length > 0 && (
                   <FadeUp>
                     <Card>
@@ -170,7 +166,6 @@ const Report: React.FC = () => {
                   </FadeUp>
                 )}
 
-                {/* ═══ PATTERN INSIGHTS ═══ */}
                 {report.pattern_insights.length > 0 && (
                   <FadeUp>
                     <Card>
@@ -196,7 +191,6 @@ const Report: React.FC = () => {
                   </FadeUp>
                 )}
 
-                {/* ═══ FOCUS RECOMMENDATION ═══ */}
                 {report.focus_recommendation && (
                   <FadeUp>
                     <Card className="border-brand-400/20">
@@ -209,7 +203,6 @@ const Report: React.FC = () => {
                   </FadeUp>
                 )}
 
-                {/* ═══ COACH NOTE ═══ */}
                 {report.coach_note && (
                   <FadeUp>
                     <Card>
@@ -222,7 +215,6 @@ const Report: React.FC = () => {
                   </FadeUp>
                 )}
 
-                {/* ═══ FOOTER ═══ */}
                 <FadeUp>
                   <div className="flex flex-col items-center gap-3 mt-2">
                     <Button

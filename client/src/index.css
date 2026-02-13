@@ -1,31 +1,22 @@
 @import "tailwindcss";
 
-/* ============================================================
-   NawmAI — Enactus-Inspired Premium Theme
-   Yellow accent · Black backgrounds · Elegant & high-contrast
-   ============================================================ */
-
 @theme {
-  /* Backgrounds — true dark scale */
   --color-navy-950: #050505;
   --color-navy-900: #0a0a0a;
   --color-navy-800: #111111;
   --color-navy-700: #1c1c1c;
   --color-navy-600: #2a2a2a;
 
-  /* Text scale */
   --color-slate-100: #f5f5f5;
   --color-slate-200: #e5e5e5;
   --color-slate-300: #d4d4d4;
   --color-slate-400: #a1a1aa;
   --color-slate-500: #71717a;
 
-  /* Brand accent — Enactus yellow */
   --color-brand-400: #FBBF24;
   --color-brand-500: #EAB308;
   --color-brand-600: #CA8A04;
 
-  /* Semantic colors */
   --color-indigo-400: #FBBF24;
   --color-indigo-500: #EAB308;
   --color-emerald-400: #34D399;
@@ -41,7 +32,6 @@
   --color-sky-400: #38BDF8;
 }
 
-/* ---- Global ---- */
 html {
   scroll-behavior: smooth;
 }
@@ -56,7 +46,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---- Custom scrollbar ---- */
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -68,7 +57,6 @@ body {
   border-radius: 999px;
 }
 
-/* ---- Skeleton shimmer ---- */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -81,7 +69,6 @@ body {
   border-radius: 12px;
 }
 
-/* ---- Yellow glow pulse for buttons ---- */
 @keyframes glow-pulse {
   0%, 100% { box-shadow: 0 0 12px rgba(251, 191, 36, 0.15); }
   50% { box-shadow: 0 0 24px rgba(251, 191, 36, 0.3); }
@@ -91,7 +78,6 @@ body {
   animation: glow-pulse 2s ease-in-out infinite;
 }
 
-/* ---- Reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -102,7 +88,6 @@ body {
   .glow-yellow { animation: none; }
 }
 
-/* ---- Focus ring ---- */
 :focus-visible {
   outline: 2px solid #FBBF24;
   outline-offset: 2px;

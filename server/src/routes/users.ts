@@ -3,7 +3,6 @@ import { createUser, getUserByEmail } from '../db/queries';
 import { isValidEmail } from '../utils/validation';
 
 export const userRoutes = async (fastify: FastifyInstance) => {
-  // Register or login user (simple email-based identification)
   fastify.post('/api/users', async (request, reply) => {
     const { name, email, age } = request.body as {
       name: string;
@@ -11,7 +10,6 @@ export const userRoutes = async (fastify: FastifyInstance) => {
       age?: number;
     };
 
-    // Validate inputs
     if (!name || !email) {
       return reply.status(400).send({ error: 'Name and email are required' });
     }
@@ -33,7 +31,6 @@ export const userRoutes = async (fastify: FastifyInstance) => {
     }
   });
 
-  // Get user by email (for login)
   fastify.get('/api/users/:email', async (request, reply) => {
     const { email } = request.params as { email: string };
 

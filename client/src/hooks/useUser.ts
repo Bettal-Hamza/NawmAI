@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import React from 'react';
 
-// Simple user state stored in localStorage — no complex auth needed for MVP
 export interface User {
   id: string;
   name: string;
@@ -16,7 +15,6 @@ interface UserContextType {
   logout: () => void;
 }
 
-// Read localStorage synchronously to avoid flash of unauthenticated state
 const getStoredUser = (): User | null => {
   try {
     const stored = localStorage.getItem('nawmai_user');
@@ -34,7 +32,6 @@ const UserContext = createContext<UserContextType>({
   logout: () => {},
 });
 
-// Provider component — wrap the entire app with this
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(getStoredUser);
 
@@ -55,5 +52,4 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook — use this in any component to access shared user state
 export const useUser = () => useContext(UserContext);

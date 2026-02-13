@@ -23,10 +23,8 @@ export const SkeletonCard: React.FC<SkeletonProps> = ({ className = '' }) => (
   </div>
 );
 
-/** Dashboard skeleton: score + stats + chart + missions */
 export const DashboardSkeleton: React.FC = () => (
   <div className="animate-pulse">
-    {/* Score hero row */}
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div className="bg-navy-800 rounded-2xl border border-navy-700 p-6 flex flex-col items-center justify-center">
         <SkeletonLine className="w-20 mb-4" />
@@ -44,7 +42,6 @@ export const DashboardSkeleton: React.FC = () => (
       </div>
     </div>
 
-    {/* Trend chart */}
     <div className="bg-navy-800 rounded-2xl border border-navy-700 p-6 mb-6">
       <SkeletonLine className="w-24 mb-4" />
       <div className="flex items-end justify-between gap-2 h-36">
@@ -57,7 +54,6 @@ export const DashboardSkeleton: React.FC = () => (
       </div>
     </div>
 
-    {/* Missions */}
     <div className="bg-navy-800 rounded-2xl border border-navy-700 p-6 mb-6">
       <SkeletonLine className="w-32 mb-4" />
       {[...Array(3)].map((_, i) => (
@@ -70,7 +66,6 @@ export const DashboardSkeleton: React.FC = () => (
   </div>
 );
 
-/** Report skeleton */
 export const ReportSkeleton: React.FC = () => (
   <div className="animate-pulse">
     <div className="bg-navy-800 rounded-2xl border border-navy-700 p-6 mb-4 flex flex-col items-center">

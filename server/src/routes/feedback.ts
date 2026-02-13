@@ -3,7 +3,6 @@ import { createFeedback } from '../db/queries';
 import { isValidUUID, isValidRating } from '../utils/validation';
 
 export const feedbackRoutes = async (fastify: FastifyInstance) => {
-  // Submit feedback
   fastify.post('/api/feedback', async (request, reply) => {
     const { userId, message, rating } = request.body as {
       userId: string;

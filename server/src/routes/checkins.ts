@@ -4,7 +4,6 @@ import { isValidUUID, isValidTime, isValidRating, isValidDate } from '../utils/v
 import { generateDailyFeedback } from '../services/ai';
 
 export const checkinRoutes = async (fastify: FastifyInstance) => {
-  // Submit daily check-in
   fastify.post('/api/checkins', async (request, reply) => {
     const { userId, checkinDate, bedtime, wakeupTime, sleepQuality, mood, notes, phoneBeforeBed } = request.body as {
       userId: string;
@@ -17,7 +16,6 @@ export const checkinRoutes = async (fastify: FastifyInstance) => {
       phoneBeforeBed?: boolean;
     };
 
-    // Validate required fields
     if (!userId || !checkinDate || !bedtime || !wakeupTime || !sleepQuality || !mood) {
       return reply.status(400).send({ error: 'All fields except notes are required' });
     }
@@ -43,7 +41,6 @@ export const checkinRoutes = async (fastify: FastifyInstance) => {
         userId, checkinDate, bedtime, wakeupTime, sleepQuality, mood, notes, phoneBeforeBed
       );
 
-      // Generate optional daily feedback (non-blocking — don't fail the check-in if this errors)
       let dailyFeedback = '';
       try {
         const profile = await getSleepProfile(userId);
@@ -68,7 +65,6 @@ export const checkinRoutes = async (fastify: FastifyInstance) => {
     }
   });
 
-  // Get recent check-ins
   fastify.get('/api/checkins/:userId', async (request, reply) => {
     const { userId } = request.params as { userId: string };
     const { limit } = request.query as { limit?: string };
@@ -86,7 +82,6 @@ export const checkinRoutes = async (fastify: FastifyInstance) => {
     }
   });
 
-  // Get weekly summary stats
   fastify.get('/api/checkins/:userId/summary', async (request, reply) => {
     const { userId } = request.params as { userId: string };
 

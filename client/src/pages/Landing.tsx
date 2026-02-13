@@ -48,7 +48,6 @@ const Landing: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Nav */}
       <motion.nav
         className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full"
         initial={{ opacity: 0, y: -12 }}
@@ -69,7 +68,6 @@ const Landing: React.FC = () => {
         </div>
       </motion.nav>
 
-      {/* Login Modal */}
       <AnimatePresence>
         {showLogin && (
           <motion.div
@@ -115,10 +113,8 @@ const Landing: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Hero */}
       <main className="flex-1 flex items-center justify-center px-6">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Glowing yellow orb */}
           <FadeInUp delay={0.1}>
             <div className="relative inline-block mb-8">
               <div className="w-24 h-24 rounded-full bg-brand-400/15 blur-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -160,7 +156,6 @@ const Landing: React.FC = () => {
         </div>
       </main>
 
-      {/* Features */}
       <section className="px-6 py-20 max-w-5xl mx-auto w-full">
         <StaggerContainer className="grid md:grid-cols-3 gap-6" delay={0.3} staggerDelay={0.15}>
           <FadeUp>
@@ -187,7 +182,6 @@ const Landing: React.FC = () => {
         </StaggerContainer>
       </section>
 
-      {/* Footer */}
       <footer className="text-center py-8 text-sm text-slate-500 border-t border-navy-700">
         <p>NawmAI — An Enactus Project · Built with <HiOutlineHeart className="inline text-brand-400" /></p>
       </footer>

@@ -1,7 +1,5 @@
 import pool from './pool';
 
-// ============ USERS ============
-
 export const createUser = async (name: string, email: string, age?: number) => {
   const result = await pool.query(
     `INSERT INTO users (name, email, age) VALUES ($1, $2, $3)
@@ -21,8 +19,6 @@ export const getUserById = async (id: string) => {
   const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
   return result.rows[0] || null;
 };
-
-// ============ SLEEP PROFILES ============
 
 export const createSleepProfile = async (
   userId: string,
@@ -47,9 +43,6 @@ export const getSleepProfile = async (userId: string) => {
   return result.rows[0] || null;
 };
 
-// ============ SLEEP CHECK-INS ============
-
-/** Compute sleep duration in hours from HH:MM strings (handles midnight crossing) */
 const computeSleepHours = (bedtime: string, wakeup: string): number => {
   const [bh, bm] = bedtime.split(':').map(Number);
   const [wh, wm] = wakeup.split(':').map(Number);
@@ -114,7 +107,6 @@ export const getWeeklySummary = async (userId: string) => {
   return result.rows[0];
 };
 
-/** Get all check-ins from the last 7 days (full rows for AI processing) */
 export const getWeeklyCheckins = async (userId: string) => {
   const result = await pool.query(
     `SELECT * FROM sleep_checkins
@@ -125,7 +117,6 @@ export const getWeeklyCheckins = async (userId: string) => {
   return result.rows;
 };
 
-/** Get previous week's summary for trend comparison */
 export const getPreviousWeekSummary = async (userId: string) => {
   const result = await pool.query(
     `SELECT
@@ -142,7 +133,6 @@ export const getPreviousWeekSummary = async (userId: string) => {
   return result.rows[0];
 };
 
-// Fallback: get ALL check-ins count (used if weekly is empty)
 export const getTotalCheckinCount = async (userId: string) => {
   const result = await pool.query(
     'SELECT COUNT(*)::int AS count FROM sleep_checkins WHERE user_id = $1',
@@ -151,8 +141,6 @@ export const getTotalCheckinCount = async (userId: string) => {
   return result.rows[0]?.count || 0;
 };
 
-// ============ FEEDBACK ============
-
 export const createFeedback = async (userId: string, message: string, rating: number) => {
   const result = await pool.query(
     `INSERT INTO feedback (user_id, message, rating) VALUES ($1, $2, $3) RETURNING *`,
@@ -160,8 +148,6 @@ export const createFeedback = async (userId: string, message: string, rating: nu
   );
   return result.rows[0];
 };
-
-// ============ WEEKLY REPORTS ============
 
 export const saveWeeklyReport = async (
   userId: string,

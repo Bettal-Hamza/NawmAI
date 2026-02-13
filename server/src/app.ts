@@ -13,7 +13,6 @@ const PORT = parseInt(process.env.PORT || '3001');
 
 const app = Fastify({ logger: true });
 
-// Register plugins and routes
 const start = async () => {
   try {
     await registerCors(app);
@@ -23,7 +22,6 @@ const start = async () => {
     await app.register(reportRoutes);
     await app.register(feedbackRoutes);
 
-    // Health check endpoint
     app.get('/api/health', async () => ({ status: 'ok', timestamp: new Date().toISOString() }));
 
     await app.listen({ port: PORT, host: '0.0.0.0' });
