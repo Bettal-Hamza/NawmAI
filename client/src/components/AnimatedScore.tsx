@@ -37,7 +37,6 @@ const AnimatedScore: React.FC<AnimatedScoreProps> = ({
   useEffect(() => {
     if (!isInView) return;
 
-    let start = 0;
     const duration = 1000; // 1 second
     const startTime = performance.now();
 

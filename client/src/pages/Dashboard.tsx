@@ -60,7 +60,16 @@ const Dashboard: React.FC = () => {
   const [reportData, setReportData] = useState<{ report: any; generatedAt: string } | null>(null);
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState('');
-  const [completedMissions, setCompletedMissions] = useState<Set<string>>(new Set());
+
+  // Persist completed missions to localStorage (keyed by date so they reset daily)
+  const todayKey = (() => { const n = new Date(); return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`; })();
+  const [completedMissions, setCompletedMissions] = useState<Set<string>>(() => {
+    try {
+      const stored = localStorage.getItem(`nawmai_missions_${todayKey}`);
+      return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch { return new Set(); }
+  });
+  const [fetchError, setFetchError] = useState('');
 
   const handleCheckinClick = async (checkin: Checkin) => {
     setSelectedCheckin(checkin);
@@ -88,6 +97,7 @@ const Dashboard: React.FC = () => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
+      localStorage.setItem(`nawmai_missions_${todayKey}`, JSON.stringify([...next]));
       return next;
     });
   };
@@ -106,6 +116,7 @@ const Dashboard: React.FC = () => {
         setProfile(profileData);
       } catch (err) {
         console.error('Failed to load dashboard data:', err);
+        setFetchError('Failed to load your data. Please try refreshing.');
       } finally {
         setLoading(false);
       }
@@ -128,6 +139,11 @@ const Dashboard: React.FC = () => {
   const sleepDebt = computeSleepDebt(checkins, profile);
   const missions = generateMissions(profile);
   const trendData = buildTrendData(checkins, profile);
+
+  // Check if user already checked in today
+  const checkedInToday = latestCheckin
+    ? latestCheckin.checkin_date.split('T')[0] === todayKey
+    : false;
 
   const qualityIcon = (q: number) => {
     const icons = [
@@ -230,6 +246,15 @@ const Dashboard: React.FC = () => {
 
         {loading ? (
           <DashboardSkeleton />
+        ) : fetchError ? (
+          <FadeInUp delay={0.2}>
+            <Card className="text-center py-12 mb-8">
+              <HiOutlineSparkles className="text-5xl mx-auto mb-4 text-slate-500" />
+              <h3 className="text-lg font-semibold text-slate-100 mb-2">Couldn't load data</h3>
+              <p className="text-slate-400 mb-6">{fetchError}</p>
+              <Button onClick={() => window.location.reload()}>Refresh</Button>
+            </Card>
+          </FadeInUp>
         ) : checkins.length === 0 ? (
           <FadeInUp delay={0.2}>
             <Card className="text-center py-12 mb-8">
@@ -351,7 +376,14 @@ const Dashboard: React.FC = () => {
 
             <FadeUp>
               <div className="grid grid-cols-3 gap-4 mb-6">
-                <ActionCard icon={<HiOutlinePencilSquare className="text-2xl text-brand-400" />} label="Check-in" onClick={() => navigate('/checkin')} />
+                <div className="relative">
+                  <ActionCard icon={<HiOutlinePencilSquare className="text-2xl text-brand-400" />} label={checkedInToday ? 'Update Check-in' : 'Check-in'} onClick={() => navigate('/checkin')} />
+                  {checkedInToday && (
+                    <span className="absolute -top-2 -right-2 bg-emerald-400 text-black text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                      Done ✓
+                    </span>
+                  )}
+                </div>
                 <ActionCard icon={<HiOutlineChartBar className="text-2xl text-brand-400" />} label="Weekly Report" onClick={() => navigate('/report')} />
                 <ActionCard icon={<HiOutlineChatBubbleLeftRight className="text-2xl text-brand-400" />} label="Give Feedback" onClick={() => navigate('/feedback')} />
               </div>
@@ -376,7 +408,7 @@ const Dashboard: React.FC = () => {
                           <Card className="flex flex-row items-center justify-between !p-4 hover:border-brand-400/25 hover:scale-[1.01] transition-all duration-200 cursor-pointer">
                             <div>
                               <p className="text-sm font-medium text-slate-100">
-                                {new Date(c.checkin_date).toLocaleDateString('en-US', {
+                                {new Date(c.checkin_date.split('T')[0] + 'T12:00:00').toLocaleDateString('en-US', {
                                   weekday: 'short', month: 'short', day: 'numeric',
                                 })}
                               </p>
@@ -420,7 +452,7 @@ const Dashboard: React.FC = () => {
                 <div onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-lg font-bold text-slate-100">
-                      {new Date(selectedCheckin.checkin_date).toLocaleDateString('en-US', {
+                      {new Date(selectedCheckin.checkin_date.split('T')[0] + 'T12:00:00').toLocaleDateString('en-US', {
                         weekday: 'long', month: 'long', day: 'numeric',
                       })}
                     </h2>

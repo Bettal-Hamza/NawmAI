@@ -44,7 +44,8 @@ export const computeStreak = (checkins: Checkin[]): number => {
 
   const dates = checkins.map((c) => normalizeDate(c.checkin_date));
   let streak = 1;
-  const today = normalizeDate(new Date().toISOString());
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   const daysSinceLast = daysBetween(dates[0], today);
   if (daysSinceLast > 1) return 0;
@@ -149,7 +150,7 @@ export const buildTrendData = (
   const sorted = [...checkins].reverse().slice(-7);
 
   return sorted.map((c) => {
-    const d = new Date(c.checkin_date);
+    const d = new Date(c.checkin_date.split('T')[0] + 'T12:00:00');
     return {
       day: d.toLocaleDateString('en-US', { weekday: 'short' }),
       date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),

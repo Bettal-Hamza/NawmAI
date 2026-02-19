@@ -12,7 +12,7 @@ const Feedback = lazy(() => import('./pages/Feedback'));
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUser();
-  if (!user) return <Navigate to="/onboarding" replace />;
+  if (!user) return <Navigate to="/" replace />;
   return <>{children}</>;
 };
 

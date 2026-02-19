@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -11,8 +11,25 @@ import { HiOutlineMoon, HiOutlineSparkles, HiOutlineHandRaised, HiOutlineHeart, 
 
 const Landing: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user, saveUser } = useUser();
   const [showLogin, setShowLogin] = useState(false);
+
+  // Auto-open login modal when navigated with ?login=true
+  useEffect(() => {
+    if (searchParams.get('login') === 'true') {
+      setShowLogin(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
+
+  // Clear form state when modal opens fresh
+  const openLogin = () => {
+    setLoginEmail('');
+    setLoginError('');
+    setEmailFormatError('');
+    setShowLogin(true);
+  };
   const [loginEmail, setLoginEmail] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -59,7 +76,7 @@ const Landing: React.FC = () => {
           <span className="text-xl font-bold text-slate-100">NawmAI</span>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={() => setShowLogin(true)}>
+          <Button variant="ghost" size="sm" onClick={openLogin}>
             Log In
           </Button>
           <Button size="sm" onClick={() => navigate('/onboarding')}>
@@ -142,7 +159,7 @@ const Landing: React.FC = () => {
               <Button size="lg" className="glow-yellow" onClick={() => navigate('/onboarding')}>
                 Start Your Journey
               </Button>
-              <Button variant="secondary" size="lg" onClick={() => setShowLogin(true)}>
+              <Button variant="secondary" size="lg" onClick={openLogin}>
                 I Have an Account
               </Button>
             </div>

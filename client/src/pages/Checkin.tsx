@@ -27,7 +27,9 @@ const Checkin: React.FC = () => {
 
   if (!user) return null;
 
-  const today = new Date().toISOString().split('T')[0];
+  // Use local date (not UTC) to avoid timezone-shift bugs
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,9 +149,12 @@ const Checkin: React.FC = () => {
                     placeholder-slate-500 focus:outline-none focus:border-brand-400 focus:ring-2
                     focus:ring-brand-400/25 transition-all duration-200 resize-none"
                 />
-                <div className="flex items-start gap-1.5 mt-1">
-                  <HiOutlineLightBulb className="text-sm text-brand-400 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs text-slate-500">Adding notes helps your AI coach give better weekly insights.</p>
+                <div className="flex items-center justify-between mt-1">
+                  <div className="flex items-start gap-1.5">
+                    <HiOutlineLightBulb className="text-sm text-brand-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-slate-500">Adding notes helps your AI coach give better weekly insights.</p>
+                  </div>
+                  <span className="text-xs text-slate-500 flex-shrink-0 ml-2">{notes.length}/500</span>
                 </div>
               </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -29,8 +29,7 @@ const Onboarding: React.FC = () => {
   const { user, saveUser } = useUser();
 
   if (user) {
-    navigate('/dashboard', { replace: true });
-    return null;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <OnboardingWizard saveUser={saveUser} navigate={navigate} />;
@@ -81,6 +80,14 @@ const OnboardingWizard: React.FC<{
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
+        {/* Back to home */}
+        <button
+          onClick={() => navigate('/')}
+          className="text-slate-500 hover:text-slate-100 text-sm mb-6 flex items-center gap-1 cursor-pointer transition-colors"
+        >
+          ← Back to Home
+        </button>
+
         {/* Progress bar */}
         <div className="flex items-center justify-center gap-2 mb-8">
           {[1, 2, 3].map((s) => (
